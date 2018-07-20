@@ -33,6 +33,33 @@ document.addEventListener('click', (e) => {
   }
 });
 
+document.addEventListener('click', (e) => {
+  if(e.target && e.target.className == 'delete-ticket'){
+    http.post('controller.php?m=deleteTicket', e.target.id)
+      .then(data => {getTickets(); getCompanies()})
+      .catch(err => console.log(err));
+    e.preventDefault();
+  }
+});
+
+document.addEventListener('change', (e) => {
+  if(e.target && e.target.className == 'complete-checkbox'){
+    http.post('controller.php?m=completeTicket', e.target.id)
+      .then(data => {getTickets(); getCompanies()})
+      .catch(err => console.log(err));
+    e.preventDefault();
+  }
+});
+
+document.addEventListener('change', (e) => {
+  if(e.target && e.target.className == 'incomplete-checkbox'){
+    http.post('controller.php?m=incompleteTicket', e.target.id)
+      .then(data => {getTickets(); getCompanies()})
+      .catch(err => console.log(err));
+    e.preventDefault();
+  }
+});
+
 
 
 document.querySelector('#ticket-form').addEventListener('submit', (e) =>{
@@ -131,11 +158,19 @@ function makeTicketRows(data)
   tableBody.innerHTML = '';
   data.forEach(d => {
     let tr = document.createElement('tr');
+    if(d.Completed == 1){
+      tr.style.backgroundColor = 'pink';
+    }
+
       tr.innerHTML += `<td> ${d.Name} </td>`;
       tr.innerHTML += `<td> ${d.Description} </td>`;
       tr.innerHTML += `<td> ${d.Company} </td>`;
       tr.innerHTML += `<td> ${d.DueDate} </td>`;
-      tr.innerHTML += `<td> <input type="checkbox"> </td>`;
+      if(d.Completed == 1){
+      tr.innerHTML += `<td> <input type="checkbox" class="incomplete-checkbox" id="${d.id}" value="1" checked> </td>`;
+      } else {
+        tr.innerHTML += `<td> <input type="checkbox" class="complete-checkbox" id="${d.id}" value="1"> </td>`;
+      }
       tr.innerHTML += `<td colspan="2"><button class="delete-ticket" id='${d.id}'>delete</button>
       <button class="edit-item" id='${d.id}'>edit</button> </td>`;
 

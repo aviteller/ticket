@@ -110,14 +110,7 @@ class Base {
 
     public function CalculatePagesBySQL($sql) {
 
-
-        //get the number of rows that match the query (without page limiting)
-
-        
-
         $sql="SELECT COUNT(*) AS recCount FROM ($sql) as t";
-
-
 
         $this->db->query($sql);
         $this->totalRows = $this->db->first()->recCount;
@@ -130,8 +123,6 @@ class Base {
         return $p;
     }
 
-    
-    
     public function updateByColumnName($table, $where, $fields) {
 
         $set = '';
@@ -173,7 +164,7 @@ class Base {
 
         if(!$this->db->query($sql, $fields)->error()) {
             $this->_lastid = $this->db->_pdo->lastInsertId();
-            //var_dump($this->_lastid);exit;
+
             return $this->_lastid;
         }
 
@@ -181,9 +172,6 @@ class Base {
     }
 
     public function update($table, $id, $fields) {
-
-       // var_dump($fields);exit;
-
 
         $set = '';
         $x = 1;
@@ -198,7 +186,6 @@ class Base {
 
         $sql = "UPDATE {$table} SET {$set} WHERE id = {$id}";
 
-        //echo $sql;exit;
         if(!$this->db->query($sql, $fields)->error()) {
             
             return true;
@@ -206,7 +193,6 @@ class Base {
 
         return false;
     }
-
 
 	public function item($table, $where = null)
 	{
@@ -218,8 +204,6 @@ class Base {
 	{
 
         $table_letter = mb_substr($table, 0, 2);
-
-        
 
         if($this->fields) {
             $this->action('SELECT '.$this->fields, $table, $table_letter, $where);
