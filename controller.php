@@ -49,6 +49,13 @@ switch ($method) {
     ));
     echo json_encode('Updated');
     break;
+  case 'updateNote':
+  //var_dump($decoded['id'], $decoded['notes']);
+    $base->update('tickets', $decoded['id'], array(
+      'Notes' => "{$decoded['notes']}",
+    ));
+    echo json_encode('Updated');
+    break;
   default:
     # code...
     break;

@@ -4,8 +4,7 @@ const companyFormGroup = document.querySelector('#company-form-group');
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  getTickets();
-  getCompanies();
+  loadData();
 });
 
 
@@ -17,9 +16,26 @@ document.addEventListener('change', (e) => {
   }
 });
 
+
+
 document.addEventListener('click', (e) => {
   if(e.target && e.target.id == 'cancel-other-option'){
     getCompanies();
+    e.preventDefault();
+  }
+});
+
+document.addEventListener('focusout', (e) => {
+  if(e.target && e.target.className == 'notes'){
+
+    const data = {
+      id : e.target.id,
+      notes : e.target.innerHTML,
+    }
+
+    http.post('controller.php?m=updateNote', data)
+      .then(data => {getTickets(); getCompanies()})
+      .catch(err => console.log(err));
     e.preventDefault();
   }
 });
@@ -87,6 +103,12 @@ document.querySelector('#ticket-form').addEventListener('submit', (e) =>{
   date.value = '';
 
 });
+
+function loadData()
+{
+  getTickets();
+  getCompanies();
+}
 
 function makeCompanySelectIntoTextBox()
 {
@@ -163,7 +185,12 @@ function makeTicketRows(data)
     }
 
       tr.innerHTML += `<td> ${d.Name} </td>`;
-      tr.innerHTML += `<td> ${d.Description} </td>`;
+      if(d.Notes != ''){
+        tr.innerHTML += `<td> ${d.Description} <br><br> Notes:<div class="notes" id="${d.id}" contenteditable="true">${d.Notes}</div> </td>`;
+      } else {
+
+        tr.innerHTML += `<td> ${d.Description} <br><br> Notes:<div class="notes" id="${d.id}" contenteditable="true">Enter a note here</div> </td>`;
+      }
       tr.innerHTML += `<td> ${d.Company} </td>`;
       tr.innerHTML += `<td> ${d.DueDate} </td>`;
       if(d.Completed == 1){
@@ -172,7 +199,7 @@ function makeTicketRows(data)
         tr.innerHTML += `<td> <input type="checkbox" class="complete-checkbox" id="${d.id}" value="1"> </td>`;
       }
       tr.innerHTML += `<td colspan="2"><button class="delete-ticket" id='${d.id}'>delete</button>
-      <button class="edit-item" id='${d.id}'>edit</button> </td>`;
+      <button style="display:none;" class="edit-item" id='${d.id}'>edit</button> </td>`;
 
       tableBody.appendChild(tr);
   });
