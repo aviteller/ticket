@@ -189,7 +189,7 @@ function makeTicketRows(data)
         tr.innerHTML += `<td> ${d.Description} <br><br> Notes:<div class="notes" id="${d.id}" contenteditable="true">${d.Notes}</div> </td>`;
       } else {
 
-        tr.innerHTML += `<td> ${d.Description} <br><br> Notes:<div class="notes" id="${d.id}" contenteditable="true">Enter a note here</div> </td>`;
+        tr.innerHTML += `<td> ${d.Description} <br><br><hr> Notes:<div class="notes" id="${d.id}" contenteditable="true">Enter a note here</div> </td>`;
       }
       tr.innerHTML += `<td> ${d.Company} </td>`;
       tr.innerHTML += `<td> ${d.DueDate} </td>`;
