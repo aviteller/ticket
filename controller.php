@@ -13,7 +13,8 @@ $method = $_REQUEST['m'];
 
 switch ($method) {
   case 'getTickets':
-    $base->OrderBy('Completed');
+  $base->OrderBy2('-Priority');
+  $base->OrderBy('Completed');
     echo json_encode($base->listItems('tickets'));
     break;
   case 'addTicket':
@@ -56,6 +57,13 @@ switch ($method) {
     ));
     echo json_encode('Updated');
     break;
+  case 'updatePriority':
+    //var_dump($decoded['id'], $decoded['notes']);
+      $base->update('tickets', $decoded['id'], array(
+        'Priority' => "{$decoded['priority']}",
+      ));
+      echo json_encode('Updated');
+      break;
   default:
     # code...
     break;

@@ -40,6 +40,20 @@ document.addEventListener('focusout', (e) => {
   }
 });
 
+document.addEventListener('focusout', (e) => {
+  if(e.target && e.target.classList.contains('priority')){
+    const data = {
+      id : e.target.id,
+      priority : e.target.value,
+    }
+
+    http.post('controller.php?m=updatePriority', data)
+      .then(data => {getTickets(); getCompanies()})
+      .catch(err => console.log(err));
+    e.preventDefault();
+  }
+});
+
 document.addEventListener('click', (e) => {
   if(e.target && e.target.className == 'delete-ticket'){
     http.post('controller.php?m=deleteTicket', e.target.id)
@@ -192,12 +206,13 @@ function makeTicketRows(data)
         tr.innerHTML += `<td> ${d.Description} <hr> Notes:<div class="notes" id="${d.id}" contenteditable="true">Enter a note here</div> </td>`;
       }
       tr.innerHTML += `<td> ${d.Company} </td>`;
-      tr.innerHTML += `<td> ${d.DueDate} </td>`;
+      tr.innerHTML += `<td> ${d.DueDate} </td>`; 
       if(d.Completed == 1){
       tr.innerHTML += `<td> <input type="checkbox" class="incomplete-checkbox" id="${d.id}" value="1" checked> </td>`;
       } else {
         tr.innerHTML += `<td> <input type="checkbox" class="complete-checkbox" id="${d.id}" value="1"> </td>`;
       }
+      tr.innerHTML += `<td><input type="number" class="priority form-control" id="${d.id}" value="${d.Priority}">  </td>`;
       tr.innerHTML += `<td colspan="2"><button class="delete-ticket" id='${d.id}'>delete</button>
       <button style="display:none;" class="edit-item" id='${d.id}'>edit</button> </td>`;
 

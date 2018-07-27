@@ -38,6 +38,7 @@
             <th>Company</th>
             <th>Date Due</th>
             <th>Completed</th>
+            <th>Priority</th>
             <th colspan="2">Controls</th>
           </tr>
         </thead>

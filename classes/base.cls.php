@@ -3,6 +3,7 @@
 class Base {
 
     public $orderBy,
+           $orderBy2,
            $limit,
            $totalRows,
            $pageSize,
@@ -19,6 +20,7 @@ class Base {
         $this->pageSize = 1;
 	}
 
+    
     public function OrderBy($field){
         if ($field){
             if (substr($field,0,1)=='-')
@@ -28,7 +30,15 @@ class Base {
             $this->orderBy=$order;
         }
     }
-
+    public function OrderBy2($field){
+        if ($field){
+            if (substr($field,0,1)=='-')
+                $order=substr($field,1)." desc";
+            else
+                $order=$field." asc";
+            $this->orderBy2=', '.$order;
+        }
+    }
     
 
     public function setFilter($filter = '')
@@ -43,6 +53,12 @@ class Base {
 
     }
 
+    public function SetOrderBy2($orderBy){
+        if(!$orderBy) return;
+
+        $this->orderBy2 = $orderBy;
+
+    }
 
     public function SetLimit($limit,$start=0){
         $this->limit="LIMIT $start,$limit";
@@ -67,11 +83,11 @@ class Base {
 
 		$sql = "{$action} FROM {$table} {$table_letter} {$join} WHERE 1 AND {$table_letter}.Deleted = 0 {$where} ";
 
-        $lastSQL = "$sql $filter $orderBy $this->limit";
+        $lastSQL = "$sql $filter $orderBy $this->orderBy2 $this->limit";
 
         $sql = "SELECT {$table_letter}.id FROM {$table} {$table_letter} {$join} WHERE 1 AND {$table_letter}.Deleted = 0 {$where}";
 
-       // echo $lastSQL;
+        //echo $lastSQL;
          $this->CalculatePagesBySQL($sql);
 
 		//echo $lastSQL;
